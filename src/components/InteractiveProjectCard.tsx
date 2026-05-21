@@ -15,6 +15,9 @@ interface ProjectCardProps {
   appCode?: string;
   live?: string;
   app?: string;
+  image?: string;
+  workflow?: string;
+  onViewDetails?: () => void;
 }
 
 // ------------------------------------------------------------------
@@ -39,7 +42,7 @@ function MagneticElement({ children, strength = 30 }: { children: React.ReactNod
 // ------------------------------------------------------------------
 // Main Interactive Card Component
 // ------------------------------------------------------------------
-export default function InteractiveProjectCard({ title, desc, stat, stack, github, webCode, appCode, live, app }: ProjectCardProps) {
+export default function InteractiveProjectCard({ title, desc, stat, stack, github, webCode, appCode, live, app, image, workflow, onViewDetails }: ProjectCardProps) {
   const rectRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -236,7 +239,7 @@ export default function InteractiveProjectCard({ title, desc, stat, stack, githu
   return (
     <motion.div
       style={{ perspective: 1200 }} // Establishes 3D space
-      className="relative w-full h-[450px]"
+      className="relative w-full h-[520px]"
     >
       <motion.div
         ref={rectRef}
@@ -246,7 +249,7 @@ export default function InteractiveProjectCard({ title, desc, stat, stack, githu
         onClick={handleClick}
         whileHover={{ scale: 1.02, y: -5 }} // Subtle lift
         transition={{ type: "spring", stiffness: 300, damping: 20 }}
-        className="w-full h-full rounded-[24px] border border-white/10 bg-[#1a1a1a]/40 backdrop-blur-3xl relative cursor-crosshair overflow-hidden group shadow-[0_15px_50px_-20px_rgba(0,0,0,0.5)] hover:shadow-[0_20px_50px_-20px_rgba(168,85,247,0.3)] duration-300"
+        className="w-full h-full rounded-[24px] border border-white/10 bg-[#1a1a1a]/60 backdrop-blur-md relative cursor-crosshair overflow-hidden group shadow-[0_15px_50px_-20px_rgba(0,0,0,0.5)] hover:shadow-[0_20px_50px_-20px_rgba(168,85,247,0.3)] duration-300"
       >
         {/* Dynamic Inner Light */}
         <motion.div 
@@ -254,8 +257,16 @@ export default function InteractiveProjectCard({ title, desc, stat, stack, githu
           className="absolute inset-0 z-0 pointer-events-none"
         />
         
-        {/* Particle Canvas */}
+        {/* Particle Canvas (Always Rendered) */}
         <canvas ref={canvasRef} className="absolute inset-0 z-10 pointer-events-none" />
+
+        {/* Image Background (Below canvas) */}
+        {image && (
+          <div 
+            className="absolute inset-0 z-0 opacity-10 bg-cover bg-center transition-opacity duration-500 group-hover:opacity-25" 
+            style={{ backgroundImage: `url(${image})` }} 
+          />
+        )}
 
         {/* 3D Depth Layers for Content */}
         <div 
@@ -286,10 +297,20 @@ export default function InteractiveProjectCard({ title, desc, stat, stack, githu
 
             <motion.p 
               style={{ transform: "translateZ(20px)" }}
-              className="text-neutral-400 text-sm leading-relaxed mb-6 font-medium"
+              className="text-neutral-400 text-sm leading-relaxed mb-4 font-medium"
             >
               {desc}
             </motion.p>
+            
+            {workflow && (
+              <motion.div
+                style={{ transform: "translateZ(25px)" }}
+                className="text-xs text-purple-200/80 font-mono bg-black/40 p-2.5 rounded-lg border border-purple-500/20 leading-relaxed shadow-inner"
+              >
+                <span className="text-purple-400 font-bold block mb-1">Workflow Pipeline:</span>
+                {workflow}
+              </motion.div>
+            )}
           </div>
 
           {/* Footer Area */}
@@ -302,6 +323,16 @@ export default function InteractiveProjectCard({ title, desc, stat, stack, githu
             </span>
             
             <div className="flex flex-wrap gap-2 items-center">
+              {onViewDetails && (
+                <MagneticElement strength={25}>
+                  <button 
+                    onClick={(e) => { e.stopPropagation(); onViewDetails(); }}
+                    className="flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-purple-600/20 to-cyan-600/20 hover:from-purple-600/40 hover:to-cyan-600/40 border border-purple-500/30 hover:border-cyan-500/50 rounded-full transition-all font-semibold text-xs text-white group/btn backdrop-blur-md"
+                  >
+                    View Details
+                  </button>
+                </MagneticElement>
+              )}
               {app && (
                 <MagneticElement strength={20}>
                   <a 
