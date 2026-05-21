@@ -19,9 +19,6 @@ export default function Overlay({
   const opacity1 = useTransform(scrollYProgress, [0, 0.1, 0.25], [1, 1, 0]);
   const y1 = useTransform(scrollYProgress, [0, 0.25], [0, -120]);
   const scale1 = useTransform(scrollYProgress, [0, 0.25], [1, 0.95]);
-  const blur1Raw = useTransform(scrollYProgress, [0, 0.25], [0, 8]);
-  const blur1 = useTransform(blur1Raw, (b) => `blur(${b}px)`);
-
   const opacity1Smooth = useSpring(opacity1, smooth);
   const y1Smooth = useSpring(y1, smooth);
 
@@ -37,9 +34,6 @@ export default function Overlay({
     [120, 0, -120]
   );
   const scale2 = useTransform(scrollYProgress, [0.25, 0.6], [0.95, 1]);
-  const blur2Raw = useTransform(scrollYProgress, [0.25, 0.4], [8, 0]);
-  const blur2 = useTransform(blur2Raw, (b) => `blur(${b}px)`);
-
   const opacity2Smooth = useSpring(opacity2, smooth);
   const y2Smooth = useSpring(y2, smooth);
 
@@ -55,9 +49,6 @@ export default function Overlay({
     [120, 0, -120]
   );
   const scale3 = useTransform(scrollYProgress, [0.55, 0.9], [0.95, 1]);
-  const blur3Raw = useTransform(scrollYProgress, [0.55, 0.7], [8, 0]);
-  const blur3 = useTransform(blur3Raw, (b) => `blur(${b}px)`);
-
   const opacity3Smooth = useSpring(opacity3, smooth);
   const y3Smooth = useSpring(y3, smooth);
 
@@ -70,9 +61,8 @@ export default function Overlay({
           opacity: opacity1Smooth,
           y: y1Smooth,
           scale: scale1,
-          filter: blur1,
         }}
-        className="absolute inset-0 flex items-center justify-center text-center"
+        className="absolute inset-0 flex items-center justify-center text-center will-change-transform will-change-opacity"
       >
         <h1 className="text-3xl sm:text-4xl md:text-7xl font-bold tracking-tight text-white drop-shadow-2xl leading-tight">
           Kartikeya Krishna Mishra. <br className="md:hidden" />
@@ -88,9 +78,8 @@ export default function Overlay({
           opacity: opacity2Smooth,
           y: y2Smooth,
           scale: scale2,
-          filter: blur2,
         }}
-        className="absolute inset-0 flex items-center justify-start md:ml-[10%]"
+        className="absolute inset-0 flex items-center justify-start md:ml-[10%] will-change-transform will-change-opacity"
       >
         <h2 className="text-3xl sm:text-4xl md:text-6xl font-semibold tracking-tight text-white drop-shadow-2xl w-full max-w-xl leading-tight">
           building <br />
@@ -106,9 +95,8 @@ export default function Overlay({
           opacity: opacity3Smooth,
           y: y3Smooth,
           scale: scale3,
-          filter: blur3,
         }}
-        className="absolute inset-0 flex items-center justify-end md:mr-[10%] text-right"
+        className="absolute inset-0 flex items-center justify-end md:mr-[10%] text-right will-change-transform will-change-opacity"
       >
         <h2 className="text-3xl sm:text-4xl md:text-6xl font-semibold tracking-tight text-white drop-shadow-2xl w-full max-w-xl leading-tight">
           Bridging <br />

@@ -24,14 +24,14 @@ for (const [title, p] of Object.entries(readmes)) {
   if (fs.existsSync(p)) {
     let content = fs.readFileSync(p, 'utf-8');
     const readmeDir = path.dirname(p);
-    
+
     // Sanitize title for folder name
     const safeTitle = title.replace(/[^a-z0-9]/gi, '_').toLowerCase();
     const projectAssetDir = path.join(publicAssetsDir, safeTitle);
 
     // Find all markdown images: ![alt](url)
     const imageRegex = /!\[([^\]]*)\]\(([^)]+)\)/g;
-    
+
     content = content.replace(imageRegex, (match, alt, imgPath) => {
       // Skip absolute URLs
       if (imgPath.startsWith('http://') || imgPath.startsWith('https://') || imgPath.startsWith('data:')) {
@@ -40,7 +40,7 @@ for (const [title, p] of Object.entries(readmes)) {
 
       // It's a relative path. Resolve it locally.
       const localImagePath = path.join(readmeDir, imgPath);
-      
+
       if (fs.existsSync(localImagePath)) {
         // Create destination directory if it doesn't exist
         const destImagePath = path.join(projectAssetDir, imgPath);
@@ -48,17 +48,17 @@ for (const [title, p] of Object.entries(readmes)) {
         if (!fs.existsSync(destImageDir)) {
           fs.mkdirSync(destImageDir, { recursive: true });
         }
-        
+
         // Copy file
         fs.copyFileSync(localImagePath, destImagePath);
-        
+
         // Replace with new public path
         // In next.js/vite, files in `public/project_assets/...` are served at `/project_assets/...`
         // Ensure forward slashes for web URLs
         let webPath = `/project_assets/${safeTitle}/${imgPath}`.replace(/\\/g, '/');
         // Clean up any double slashes just in case
         webPath = webPath.replace(/\/\//g, '/');
-        
+
         return `![${alt}](${webPath})`;
       } else {
         console.warn(`[WARN] Image not found: ${localImagePath}`);

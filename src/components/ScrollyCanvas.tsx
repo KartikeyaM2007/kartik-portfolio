@@ -120,8 +120,15 @@ export default function ScrollyCanvas({ scrollYProgress }: { scrollYProgress: Mo
 
   const currentIndex = useTransform(scrollYProgress, [0, 1], [0, frameCount - 1]);
 
+  const requestRef = useRef<number>();
+
   useMotionValueEvent(currentIndex, "change", (latest) => {
-    renderFrame(Math.round(latest));
+    if (requestRef.current) {
+      cancelAnimationFrame(requestRef.current);
+    }
+    requestRef.current = requestAnimationFrame(() => {
+      renderFrame(Math.round(latest));
+    });
   });
 
   useEffect(() => {

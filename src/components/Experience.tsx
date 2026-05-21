@@ -82,7 +82,7 @@ export default function Experience() {
 
       {/* CURSOR GLOW */}
       <motion.div
-        className="absolute inset-0 pointer-events-none"
+        className="absolute inset-0 pointer-events-none will-change-transform"
         style={{ background: glow }}
       />
 
@@ -133,7 +133,7 @@ export default function Experience() {
                   transition={{ duration: 0.6 }}
                   className="w-full md:w-[45%]"
                 >
-                  <div className="bg-white/[0.03] border border-white/10 backdrop-blur-xl rounded-2xl p-8 hover:border-purple-400/40 hover:shadow-[0_0_60px_rgba(124,58,237,0.2)] transition-all duration-500 group">
+                  <div className="bg-white/[0.03] border border-white/10 backdrop-blur-md rounded-2xl p-8 hover:border-purple-400/40 hover:shadow-[0_0_60px_rgba(124,58,237,0.2)] transition-all duration-500 group will-change-transform">
 
                     {/* HEADER */}
                     <div className="flex justify-between mb-5">
