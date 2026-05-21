@@ -13,13 +13,30 @@ import Contact from "@/components/Contact";
 
 export default function Home() {
   const [showLoadingScreen, setShowLoadingScreen] = useState(true);
+  const [loadingPercent, setLoadingPercent] = useState(1);
 
   useEffect(() => {
+    const loadingDuration = 6500;
+    const intervalTime = loadingDuration / 100;
+    
+    const interval = window.setInterval(() => {
+      setLoadingPercent((prev) => {
+        if (prev >= 100) {
+          clearInterval(interval);
+          return 100;
+        }
+        return prev + 1;
+      });
+    }, intervalTime);
+
     const timer = window.setTimeout(() => {
       setShowLoadingScreen(false);
-    }, 1100);
+    }, loadingDuration + 200);
 
-    return () => window.clearTimeout(timer);
+    return () => {
+      window.clearInterval(interval);
+      window.clearTimeout(timer);
+    };
   }, []);
 
   return (
@@ -31,6 +48,9 @@ export default function Home() {
             <div className="site-loader__ring site-loader__ring--outer" />
             <div className="site-loader__ring site-loader__ring--inner" />
             <div className="site-loader__brand">KKM</div>
+          </div>
+          <div className="absolute text-neutral-400 font-mono text-sm tracking-widest opacity-80 mt-40">
+            {loadingPercent}%
           </div>
         </div>
       )}
